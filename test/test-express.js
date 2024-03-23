@@ -1,17 +1,18 @@
 const test = require("ava");
 const supertest = require("supertest");
 const express = require("express");
-let Agenda = require("agenda");
+let { Agenda } = require('@hokify/agenda');
 Agenda = Agenda.Agenda || Agenda;
 
-const agenda = new Agenda().database(
-  "mongodb://127.0.0.1/agendash-test-db",
-  "agendash-test-collection",
-  { useUnifiedTopology: true }
-);
+const agenda = new Agenda({
+  db: {
+    address: "mongodb+srv://leonkim:Pjwpx4S4aeSz75hp@qa.sgaye.mongodb.net/dev_leonkim?readConcernLevel=local&w=majority&appName=dev_leonkim",
+    collection: "agendash-test-collection"
+  }
+});
 
 const app = express();
-app.use("/", require("../app")(agenda));
+app.use("/", require("../app")(app, agenda));
 
 const request = supertest(app);
 

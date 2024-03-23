@@ -1,21 +1,13 @@
 "use strict";
-const path = require("path");
 
-module.exports = (agenda, options) => {
+module.exports = (app, agenda, options) => {
   options = options || {};
-  if (!options.middleware) {
-    options.middleware = "express";
-  }
 
   const agendash = require("./lib/controllers/agendash")(agenda, options);
-  const middlewarePath = path.join(
-    __dirname,
-    "./lib/middlewares",
-    options.middleware
-  );
+  const middlewarePath = "./lib/middlewares/express";
 
   try {
-    return require(middlewarePath)(agendash);
+    return require(middlewarePath)(app, agendash);
   } catch (error) {
     console.error(error);
     throw new Error(`Middleware load failed with ${JSON.stringify(options)}`);
